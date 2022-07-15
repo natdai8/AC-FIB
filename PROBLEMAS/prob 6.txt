@@ -1,0 +1,238 @@
+2)
+1000 1000 1001 0000 
+tamaño bloque 16 bytes -> 4 bits asi que 1000 1000 1001         				-> bloque memoria
+8 lineas (bloques) / 2 vias -> 4 conjuntos -> 2 bits de 1000 1000 10   01			-> conjunto mc
+
+10a)
+p com -> C * V^2 * f -> 5 nF * 1,2^2 * 2 Ghz -> 14,4
+p fuga -> i fuga * v -> 3 * 1,2 -> 3,6
+p total -> 14,4 + 3,6 -> 18 w
+
+10b)
+vias / bloque por conj -> enunciado 2-asociativa -> 2 vias 
+128 kb capacidad -> 128*1024 -> 2^17 b / tamaño bloque cache 64 b (2^6) -> 2^11 -> 2048 bloques
+2048 bloques / 2 vias -> 1024 bloques por via 
+			 1024 conjuntos
+
+10c)
+48 bits en total -> byte, conjunto mc, tag
+tamaño bloque 64 bytes -> 2^6 -> 6 últimos bits son el byte
+2048 lineas (bloques) / 2 vias -> 1024 -> 2^10 -> 10 bits conjunto mc
+48 - 10 - 6 -> tag -> 32 bits
+tag (32), conj mc (10), byte (6)
+
+10d) 
+hay 1024 bloques por via
+memoria datos -> 1024 bloques * 64 bytes/bloques * 8 bits/byte -> 524288 bits
+memoria etiquetas (tag 32)-> 1024 bloques * 32 bits/bloques -> 32768 bits
+
+10e)
+p fuga -> i fuga * v -> 
+total bits en 1 via -> 557056
+total bits en cache -> 557056 * 2 vias -> 1114112
+nos dan i fuga / bit asi que 3 micro * 1114112 bits * 1.2 -> 4,01 w
+
+10f)
+mflops -> 2*10^9 op coma flotante / 5 segundos -> 400000000 flops -> 400 mflops 
+
+10g)
+cpi -> (5s * 2G(1/s)) / 4*10^9 -> 2.5
+para cpi ideal no ha de haber fallos:
+fallos: 20 ciclos * 0.1 (% fallos) * 10^9 (accesos a memoria) -> 2*10^9
+total ciclos - fallos ->  5s * 2G(1/s) -> 10*10^9 - 2*10^9 -> 8*10^9
+cpi ideal -> 8*10^9 / 4*10^9 -> 2 
+
+10h)
+como es cache 2-asociativa habria que leer de las 2 vias y como es en paralelo se lee
+memoria de etiquetas y de datos a la vez, entonces hay q leer dos veces las dos cosas:
+2*5n + 2*25n -> 60 nJ
+
+10i)
+p dinamica = w / t -> energia / t -> 60 nJ * (10^9 / 5) (un acceso solo) -> 12 w
+
+10j)
+p total -> p estatica + p dinamica -> 18 w (cpu) +
+           p estatica cache        -> 4 w  +
+           p dinamica cache        -> 12 w           = 34 w
+
+10k)
+energia total -> 34 * 5s -> 170 J
+eficiencia mflops/w -> 400 / 34 -> 11,7647 mflops/w
+
+10l)
+texe -> n * cpi * t -> 
+        cpi -> dijimos que total ciclos conteniendo fallos -> 5s * 2G(1/s) -> 10*10^9 +
+               aciertos: 1 ciclo * 0.9 (% aciertos) * 10^9 (accesos a memoria) -> 0.9*10^9
+	       = 10.9 * 10^9 / 4*10^9 -> 2.725
+
+texe -> en lugar de t tenemos f -> 4*10^9 * 2.725 / 2G -> 5.45 s
+mflops -> 2*10^9 / 5.45 -> 367 mflops aprox
+
+10m)
+como es cache 2-asociativa habria que leer de las 2 vias y como es en serie se lee solo una vez
+la via pq ya sé cual es:
+2*5n + 25n -> 35 nJ
+
+10n)
+p dinamica = w / t -> energia / t -> 35 nJ * (10^9 / 5,45) (un acceso solo) -> 6.422 w
+
+10o)
+total -> p estatica + p dinamica -> 18 w (cpu) +
+         p estatica cache        -> 4 w  +
+         p dinamica cache        -> 6.422 w           = 28.422 w
+
+10p)
+energia total -> 28.422 * 5,45s -> 154,9 J
+eficiencia mflops/w -> 367 / 28,422 -> 12.9126 mflops/w
+
+10q)
+no, pq si es acierto de predictor es que esta en la cache, es contradictorio
+
+10r)
+p fuga predictor -> i fuga * v ->
+nos dan i fuga / bit asi que 3 micro * 8kbits (8 * 1024) * 1.2 -> 0.0295 w
+
+10s)
+texe -> n * cpi * t -> 
+        cpi -> dijimos que total ciclos conteniendo fallos -> 5s * 2G(1/s) -> 10*10^9 +
+               aciertos: 1 ciclo * 0.2 (% aciertos) * 10^9 (accesos a memoria) -> 0.2*10^9
+	       = 10.2 * 10^9 / 4*10^9 -> 2.55
+
+texe -> en lugar de t tenemos f -> 4*10^9 * 2.55 / 2G -> 5.1 s
+mflops -> 2*10^9 / 5.1 -> 392,157 mflops aprox
+
+10t)
+predictor acierta -> 5n + 25n + 1n -> 31 nJ
+predictor falla -> paralelo -> 2*5n + 2*25n + 1n -> 61 nJ
+media -> 0.8*31n + 0.2*61n -> 37 nJ
+
+10u)
+p dinamica = w / t -> energia / t -> 37 nJ * (10^9 / 5,1) (un acceso solo) -> 7.255 w
+
+10v)
+total -> p estatica + p dinamica -> 18 w (cpu) +
+         p estatica cache        -> 4 w  +
+         p dinamica cache        -> 7.255 w           
+	 p fugas predictor       -> 0.0295 w		= 29.2845 w
+
+10w)
+energia total -> 29.2845 * 5,1s -> 149.35 J
+eficiencia mflops/w -> 392.157 / 29.2845 -> 13.391 mflops/w
+
+10x)
+paralela -> 11,7647
+serie -> 12.9126 
+predicción -> 13.391
+
+ganancia s-p -> 12.9126 / 11.7647 -> 1.0976
+ganancia pre-s -> 13.391 / 12.9126 -> 1.037
+
+11a)
+x1 -> datos -> mux -> 0.45 + 0.1 -> 0.55 ns en los dos tiempos
+x2 -> tag -> via -> desacoplo -> datos -> mux -> desacoplo
+   -> 0,3 +  0.15 +  0.05      |  0.45 + 0.1 + 0.05
+   -> se coge al más grande (el segundo) -> 0.6 ciclo
+   -> total 0.6 * 2 = 1,2 ns
+x3 -> como la segunda parte tarda más segmentamos más la segunda parte:
+   -> tag -> via -> desacoplo -> datos -> desacoplo -> mux -> desacoplo
+   -> 0,3 +  0.15 +  0.05      |  0.45 + 0.05        |  0.1 + 0.05
+   -> se coge al más grande (en este caso es igual) -> 0.5 ciclo
+   -> total 0.5 * 3 = 1,5 ns
+x4 -> como la primera parte tarda más segmentamos más la primera parte:
+   -> tag -> desacoplo -> via -> desacoplo -> datos -> desacoplo -> mux -> desacoplo
+   -> 0,3 +  0.05       |  0.15 +  0.05      |  0.45 + 0.05        |  0.1 + 0.05
+   -> se coge al más grande -> 0.5 ciclo
+   -> total 0.5 * 4 = 2 ns
+
+11b)
+descartamos x2 pq uno de los segmentados es más grande (tc = 0.6) y se puede trocear más (x3) para mejor
+resultado; y x4 pq tarda más como total
+
+11c)
+x1 -> 1 / 0.55 ns -> 1.82 Ghz
+x3 -> 1 / 0.5 ns -> 2 Ghz
+
+11d)
+cpi ideal x1 -> 0.6 * 5 + 0.2 * 4 + 0.2 * (4 + 1) -> 4.8 
+cpi ideal x3 -> 0.6 * 5 + 0.2 * 4 + 0.2 * (4 + 3) -> 5.2 
+
+11e)
+t -> n * cpi * tc
+x1 -> t -> 2*10^9 * 4.8 * 0.55n -> 5,28 s
+x3 -> t -> 2*10^9 * 5.2 * 0.5n -> 5,2 s
+speedup -> 5.28 / 5.2 -> 1.0154x
+
+11f)
+cpi x1 = cpi ideal + cpi mem -> 4.8 + 0.1 * 60 * 0.2 -> 6
+t x1 = 2*10^9 * 6 * 0.55n -> 6.6
+cpi x3 = cpi ideal + cpi mem -> 5.2 + 0.1 * 60 * 0.2 -> 6.4
+t x3 = 2*10^9 * 6,4 * 0.5n -> 6.4
+speedup real -> 6,6 / 6,4 -> 1.03125 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
